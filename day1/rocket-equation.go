@@ -16,16 +16,15 @@ func getRequiredFuel(mass string) int {
 
 func readMasses(name string) []string {
 	f := openFile(name)
+	defer f.Close()
 
-	fileScanner := bufio.NewScanner(f)
-	fileScanner.Split(bufio.ScanLines)
-	var fileTextLines []string
+	scanner := bufio.NewScanner(f)
+	var lines []string
 
-	for fileScanner.Scan() {
-		fileTextLines = append(fileTextLines, fileScanner.Text())
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
 	}
-	f.Close()
-	return fileTextLines
+	return lines
 }
 
 func openFile(name string) *os.File {
@@ -33,17 +32,16 @@ func openFile(name string) *os.File {
 	if err != nil {
 		panic(err)
 	}
-	defer f.Close()
 	return f
 }
 
 func getTotalFuelRequired(name string) int {
 	var masses []string = readMasses("input.txt")
-	s1 := masses.([]string)
 	var totalMass int = 0
-	for mass := range masses {
-		s := mass.(string)
-		totalMass += getRequiredFuel(mass)
+	for i := range masses {
+		var mass = masses[i]
+		var fuelRequired = getRequiredFuel(mass)
+		totalMass += fuelRequired
 	}
 	return totalMass
 }
