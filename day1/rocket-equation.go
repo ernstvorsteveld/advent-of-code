@@ -6,12 +6,8 @@ import (
 	"strconv"
 )
 
-func getRequiredFuel(mass string) int {
-	i, err := strconv.Atoi(mass)
-	if err != nil {
-		panic(err)
-	}
-	return (i / 3) - 2
+func getRequiredFuel(mass int) int {
+	return (mass / 3) - 2
 }
 
 func readMasses(name string) []string {
@@ -39,9 +35,22 @@ func getTotalFuelRequired(name string) int {
 	var masses []string = readMasses("input.txt")
 	var totalMass int = 0
 	for i := range masses {
-		var mass = masses[i]
+		var mass, err = strconv.Atoi(masses[i])
+		if err != nil {
+			panic(err)
+		}
 		var fuelRequired = getRequiredFuel(mass)
 		totalMass += fuelRequired
 	}
 	return totalMass
+}
+
+func getFuelForFuel(fuelMass int) int {
+	var extra = 0
+	var fuelRequired = getRequiredFuel(fuelMass)
+	for fuelRequired >= 0 {
+		extra += fuelRequired
+		fuelRequired = getRequiredFuel(fuelRequired)
+	}
+	return extra
 }
