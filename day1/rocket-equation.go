@@ -33,24 +33,37 @@ func openFile(name string) *os.File {
 
 func getTotalFuelRequired(name string) int {
 	var masses []string = readMasses("input.txt")
-	var totalMass int = 0
+	var fuel int = 0
 	for i := range masses {
 		var mass, err = strconv.Atoi(masses[i])
 		if err != nil {
 			panic(err)
 		}
 		var fuelRequired = getRequiredFuel(mass)
-		totalMass += fuelRequired
+		fuel += fuelRequired
 	}
-	return totalMass
+	return fuel
+}
+
+func getTotalFuelForMassAndFuel(name string) int {
+	var masses []string = readMasses("input.txt")
+	var fuel int = 0
+	for i := range masses {
+		var mass, err = strconv.Atoi(masses[i])
+		if err != nil {
+			panic(err)
+		}
+		var fuelRequired = getRequiredFuel(mass)
+		fuel += fuelRequired + getFuelForFuel(fuelRequired)
+	}
+	return fuel
 }
 
 func getFuelForFuel(fuelMass int) int {
-	var extra = 0
 	var fuelRequired = getRequiredFuel(fuelMass)
-	for fuelRequired >= 0 {
-		extra += fuelRequired
-		fuelRequired = getRequiredFuel(fuelRequired)
+	if fuelRequired <= 0 {
+		return 0
+	} else {
+		return fuelRequired + getFuelForFuel(fuelRequired)
 	}
-	return extra
 }
