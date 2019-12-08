@@ -29,6 +29,13 @@ func Test_should_get_required_fuel(t *testing.T) {
 	if fuelRequired != expected {
 		t.Errorf("Fuel calculation failed, got %d, expected %d.", fuelRequired, expected)
 	}
+
+	expected = 33583
+	fuelRequired = getRequiredFuel(100756)
+	if fuelRequired != expected {
+		t.Errorf("Fuel calculation failed, got %d, expected %d.", fuelRequired, expected)
+	}
+
 }
 
 func Test_should_get_total_required_fuel(t *testing.T) {
@@ -62,5 +69,18 @@ func Test_should_get_total_required_fuel(t *testing.T) {
 	var total = getTotalFuelForMassAndFuel("input.txt")
 	if total != 5061072 {
 		t.Errorf("Total fuel for fuel calculation failed, got %d, expected %d.", total, 5061072)
+	}
+}
+
+func Test_should_use_funcs(t *testing.T) {
+	massFuel, fuelFuel := getTotalFuelForMass(100756, getRequiredFuel, getFuelForFuel)
+
+	var expected = 33583
+	if massFuel != expected {
+		t.Errorf("Fuel for mass found %d, while expected %d", massFuel, expected)
+	}
+	expected = 16763
+	if fuelFuel != expected {
+		t.Errorf("Fuel for mass found %d, while expected %d", fuelFuel, expected)
 	}
 }

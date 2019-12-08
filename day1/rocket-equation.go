@@ -11,7 +11,7 @@ func getRequiredFuel(mass int) int {
 }
 
 func readMasses(name string) []string {
-	f := openFile(name)
+	f, _ := os.Open(name)
 	defer f.Close()
 
 	scanner := bufio.NewScanner(f)
@@ -21,14 +21,6 @@ func readMasses(name string) []string {
 		lines = append(lines, scanner.Text())
 	}
 	return lines
-}
-
-func openFile(name string) *os.File {
-	f, err := os.Open(name)
-	if err != nil {
-		panic(err)
-	}
-	return f
 }
 
 func getTotalFuelRequired(name string) int {
@@ -42,25 +34,27 @@ func getTotalFuelRequired(name string) int {
 	return fuel
 }
 
+func getFuelForFuel(fuelMass int) int {
+	var fuelRequired = getRequiredFuel(fuelMass)
+	if fuelRequired <= 0 {
+		return 0
+	}
+	return fuelRequired + getFuelForFuel(fuelRequired)
+}
+
 func getTotalFuelForMassAndFuel(name string) int {
 	var masses []string = readMasses("input.txt")
 	var fuel int = 0
-	for i := range masses {
-		var mass, err = strconv.Atoi(masses[i])
-		if err != nil {
-			panic(err)
-		}
+	for _, mass := range masses {
+		var mass, _ = strconv.Atoi(mass)
 		var fuelRequired = getRequiredFuel(mass)
 		fuel += fuelRequired + getFuelForFuel(fuelRequired)
 	}
 	return fuel
 }
 
-func getFuelForFuel(fuelMass int) int {
-	var fuelRequired = getRequiredFuel(fuelMass)
-	if fuelRequired <= 0 {
-		return 0
-	} else {
-		return fuelRequired + getFuelForFuel(fuelRequired)
-	}
+func getTotalFuelForMass(mass int, massFunc func(mass int) int, fuelFunc func(fuel int) int) (int, int) {
+	var fuelForMass = massFunc(mass)
+	var fuelForFuel = fuelFunc(fuelForMass)
+	return fuelForMass, fuelForFuel
 }
