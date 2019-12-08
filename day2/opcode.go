@@ -51,8 +51,6 @@ func execute(opcodes []int) []int {
 		case 2:
 			opcodes, p = mult(opcodes, p)
 		}
-		print(opcodes)
-		//p += 4
 	}
 	return opcodes
 }
@@ -65,4 +63,22 @@ func add(opcodes []int, p int) ([]int, int) {
 func mult(opcodes []int, p int) ([]int, int) {
 	opcodes[opcodes[p+3]] = opcodes[opcodes[p+1]] * opcodes[opcodes[p+2]]
 	return opcodes, p + 4
+}
+
+func findValue(expected int) (int, int) {
+	var result []int
+	for i := 0; i < 100; i++ {
+		for j := 0; j < 100; j++ {
+			input := readOpcodes()
+
+			input[1] = i
+			input[2] = j
+			result = execute(input)
+
+			if expected == result[0] {
+				return i, j
+			}
+		}
+	}
+	return 99, 99
 }
