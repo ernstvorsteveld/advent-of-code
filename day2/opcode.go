@@ -47,22 +47,22 @@ func execute(opcodes []int) []int {
 		case 99:
 			return opcodes
 		case 1:
-			opcodes = add(opcodes, p)
+			opcodes, p = add(opcodes, p)
 		case 2:
-			opcodes = mult(opcodes, p)
+			opcodes, p = mult(opcodes, p)
 		}
 		print(opcodes)
-		p += 4
+		//p += 4
 	}
 	return opcodes
 }
 
-func add(opcodes []int, p int) []int {
+func add(opcodes []int, p int) ([]int, int) {
 	opcodes[opcodes[p+3]] = opcodes[opcodes[p+1]] + opcodes[opcodes[p+2]]
-	return opcodes
+	return opcodes, p + 4
 }
 
-func mult(opcodes []int, p int) []int {
+func mult(opcodes []int, p int) ([]int, int) {
 	opcodes[opcodes[p+3]] = opcodes[opcodes[p+1]] * opcodes[opcodes[p+2]]
-	return opcodes
+	return opcodes, p + 4
 }
