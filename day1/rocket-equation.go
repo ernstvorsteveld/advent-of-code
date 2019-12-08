@@ -35,10 +35,7 @@ func getTotalFuelRequired(name string) int {
 	var masses []string = readMasses("input.txt")
 	var fuel int = 0
 	for i := range masses {
-		var mass, err = strconv.Atoi(masses[i])
-		if err != nil {
-			panic(err)
-		}
+		var mass, _ = strconv.Atoi(masses[i])
 		var fuelRequired = getRequiredFuel(mass)
 		fuel += fuelRequired
 	}
