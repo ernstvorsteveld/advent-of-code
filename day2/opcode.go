@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func readAndPrint() []int {
+func readOpcodes() []int {
 	csvfile, err := os.Open("input.csv")
 	if err != nil {
 		log.Fatalln("Couldn't open the csv file", err)
@@ -35,4 +35,34 @@ func readAndPrint() []int {
 		ints = append(ints, i)
 	}
 	return ints
+}
+
+func execute(opcodes []int) []int {
+	var p = 0
+	var operation int = 99
+
+	for {
+		operation = opcodes[p]
+		switch operation {
+		case 99:
+			return opcodes
+		case 1:
+			opcodes = add(opcodes, p)
+		case 2:
+			opcodes = mult(opcodes, p)
+		}
+		print(opcodes)
+		p += 4
+	}
+	return opcodes
+}
+
+func add(opcodes []int, p int) []int {
+	opcodes[opcodes[p+3]] = opcodes[opcodes[p+1]] + opcodes[opcodes[p+2]]
+	return opcodes
+}
+
+func mult(opcodes []int, p int) []int {
+	opcodes[opcodes[p+3]] = opcodes[opcodes[p+1]] * opcodes[opcodes[p+2]]
+	return opcodes
 }
