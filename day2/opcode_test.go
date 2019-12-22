@@ -7,7 +7,7 @@ import (
 
 func Test_should_read_file(t *testing.T) {
 	input := readOpcodes()
-	print(input)
+	//print(input)
 	if input[1] != 12 {
 		t.Errorf("The array does not contain %d at postion %d, but %d.", 0, 1, input[1])
 	}
